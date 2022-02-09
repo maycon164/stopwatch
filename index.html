@@ -6,17 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StopWatch</title>
+    <link rel="shortcut icon" href="./src/images/chronometer.png" type="image/x-icon">
     <link rel="stylesheet" href="src/css/style.css">
+    <link rel="stylesheet" href="./src/css/effects.css">
 </head>
 
 <body>
     <section>
         <main>
-            <h1 class="name-title">Super <strong>StopWatch </strong> Bros</h1>
+            <h1 class="name-title">Super <strong>StopWatch</strong> Bros</h1>
+
             <div class="container-watch white-effect">
-                <a href="#" class="btn-restart" id="btn-restart">RESTART</a>
+                <a href="#" class="btn-reset detach" id="btn-restart-timer">RESTART</a>
                 <h1 class="timer" id="timer">
-                    00:00:00
+                    00:00:000
                 </h1>
                 <div class="container-buttons">
                     <button class="btn press-btn" id="btn-start">
@@ -26,18 +29,17 @@
             </div>
 
             <div class="container-features white-effect">
+                <a href="#" class="btn-reset detach" id="btn-reset-laps" style="display:block">RESET</a>
                 <div class="container-laps">
                     <button class="btn press-btn" id="btn-lap">
                         LAP
                     </button>
-
                     <div id="list-of-laps">
-
                     </div>
-
                 </div>
             </div>
         </main>
+
     </section>
 </body>
 <script src="./src/js/index.js"></script>
