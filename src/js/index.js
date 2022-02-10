@@ -7,6 +7,7 @@ const btnResetLapsEl = document.getElementById("btn-reset-laps");
 const btnLapEl = document.getElementById("btn-lap");
 
 const timerEl = document.getElementById("timer");
+let initialTimestamp = 0;
 
 btnStartEl.addEventListener('click', event => {
     btnStartEl.classList.toggle('pressed-btn');
@@ -19,7 +20,7 @@ btnStartEl.addEventListener('click', event => {
         stopCounter();
     }
 
-    showBtnRestart();
+    showBtnRestartTimer();
     playAudioButton();
 });
 
@@ -29,23 +30,27 @@ btnLapEl.addEventListener('click', event => {
 
     playAudioButton();
     recordLap();
+    showBtnRestartLaps();
 });
 
 btnResetLapsEl.addEventListener('click', event => {
     laps.length = 0;
+    btnResetLapsEl.style.display = "none";
     showLaps();
 });
 
 btnRestartTimerEl.addEventListener('click', event => {
-    this.initialTimestamp = 0;
+    initialTimestamp = 0;
     displayTimestamp();
+
     btnRestartTimerEl.style.display = "none";
 })
 
 
 function startCounter() {
+
     if (!timerHasStarted()) {
-        this.initialTimestamp = 0
+        initialTimestamp = 0
     }
 
     this.idInterval = setInterval(updateCount, 1);
@@ -56,18 +61,22 @@ function stopCounter() {
 }
 
 function updateCount() {
-    this.initialTimestamp += 4;
+    initialTimestamp += 4;
     displayTimestamp();
 }
 
 function displayTimestamp() {
-    let { minutes, seconds, miliseconds } = getTimestampValues();
-    timerEl.textContent = getFormatTimestamp({ minutes, seconds, miliseconds });
+    timerEl.innerHTML = getFormattedTimestamp(initialTimestamp);
 }
 
-function showBtnRestart() {
+function showBtnRestartTimer() {
     if (timerHasStarted())
         btnRestartTimerEl.style.display = "block"
+}
+function showBtnRestartLaps() {
+    if (!lapsIsEmpty()) {
+        btnResetLapsEl.style.display = "block"
+    }
 }
 
 function playAudioButton() {
@@ -76,49 +85,73 @@ function playAudioButton() {
 
 function recordLap() {
     if (timerHasStarted()) {
-        laps.push(getFormatTimestamp(getTimestampValues()));
+        let currentTimestamp = getTimestampValue();
+        let timeDifference = currentTimestamp;
+
+        if (laps.length > 0) {
+            timeDifference = currentTimestamp - laps[laps.length - 1].timestamp;
+        }
+
+        let lap = {
+            timestamp: currentTimestamp,
+            difference: timeDifference
+        }
+
+        laps.push(lap);
+
         showLaps();
     }
 }
 
 function showLaps() {
     listOfLapsEl.innerHTML = "";
-    let lapsCopy = lapsCopy.slice();
 
-    lapsCopy.reverse().forEach((lap, index) => {
-        let [minutes, seconds, miliseconds] = lap.split(":");
-        let divLap = createLap({ minutes, seconds, miliseconds, index, length: laps.length });
-        listOfLapsEl.innerHTML += divLap;
-    })
+    if (!lapsIsEmpty()) {
+        let lapsCopy = laps.slice();
+
+        lapsCopy.reverse().forEach((lap, index) => {
+            let divLap = createLap({ lap, index, length: laps.length });
+            listOfLapsEl.innerHTML += divLap;
+        })
+    }
 }
 
-function createLap({ minutes, seconds, miliseconds, index, length }) {
-    let div =
-        `<div class="container-lap">
-        <p class="detach">Lap ${(length - index).toString().padStart(2, '0')} - 
-        ${getFormatTimestamp({
-            minutes, seconds, miliseconds
-        })}
-    </p>
-        <br/>
-        <hr/>
-    </div>`
-
+function createLap({ lap, index, length }) {
+    let div = `
+    <div class="container-lap detach">
+        <p>Lap ${(length - index).toString().padStart(2, '0')}</p>
+        <p> ${getFormattedTimestamp(lap.timestamp)}</p>
+        <small> +${getFormattedTimestamp(lap.difference)}</small>
+    </div>
+    <hr>`
     return div;
 }
 
 function timerHasStarted() {
-    return this.initialTimestamp != 0 && this.initialTimestamp;
+    return initialTimestamp != 0 && initialTimestamp;
+}
+function lapsIsEmpty() {
+    return laps.length == 0;
 }
 
-function getFormatTimestamp({ minutes, seconds, miliseconds }) {
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${miliseconds.toString().padStart(3, '0')}`;
-}
-
-function getTimestampValues() {
-    let date = new Date(this.initialTimestamp);
+function getFormattedTimestamp(timestamp) {
+    let date = new Date(timestamp);
     let minutes = date.getMinutes();
     let seconds = date.getSeconds();
     let miliseconds = date.getMilliseconds();
-    return { minutes, seconds, miliseconds };
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${miliseconds.toString().padStart(3, '0')}`;
 }
+
+function getTimestampValue() {
+    return initialTimestamp;
+}
+
+//KEYBOARD EVENTS
+
+document.addEventListener("keyup", event => {
+    (event.key == "Enter") ? btnStartEl.click() : null;
+    (event.key == "Backspace") ? btnRestartTimerEl.click() : null;
+
+    (event.key == " ") ? btnLapEl.click() : null;
+    (event.key == "Escape") ? btnResetLapsEl.click() : null;
+});

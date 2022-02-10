@@ -21,6 +21,11 @@
     font-size: 30px;
 }
 
+strong {
+    text-shadow: 5px 5px 5px red;
+}
+
+
 section{
     width: 100vw;
     height: 100vh;
@@ -36,6 +41,9 @@ hr{
     border: none;
     background-color: #d95550;
     height: 2px ;
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 5px;
 }
 
 .container-watch{
@@ -59,6 +67,7 @@ a.btn-reset{
     text-align: center;
     position: relative;
 }
+
 
 .container-laps{
     width: 100%;
@@ -90,7 +99,14 @@ a.btn-reset{
     margin-top:10px;
     padding: 5px;
     text-align: center;
-    font-size: 18px;
+    font-size: 15px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-around;
+}
+
+small{
+    font-size: 10px;
 }
 
 #list-of-laps{
@@ -99,10 +115,4 @@ a.btn-reset{
     max-height: 450px;
     overflow: auto;
     position: relative;
-}
-
-.options-timer{
-    position: absolute;
-    top: 0;
-    left: 0;
 }
