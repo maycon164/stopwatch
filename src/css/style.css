@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 *{
     margin: 0;
     padding: 0;
@@ -18,13 +20,12 @@
 .name-title{
     text-align: center;
     margin: 10px;
-    font-size: 30px;
+    font-size: 40px;
 }
 
 strong {
     text-shadow: 5px 5px 5px red;
 }
-
 
 section{
     width: 100vw;
@@ -67,7 +68,6 @@ a.btn-reset{
     text-align: center;
     position: relative;
 }
-
 
 .container-laps{
     width: 100%;
