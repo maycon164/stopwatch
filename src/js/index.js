@@ -84,9 +84,8 @@ function showBtnRestartLaps() {
         btnResetLapsEl.style.display = "block"
 }
 
-
 function playAudioButton() {
-    new Audio("http://localhost:5500/src/sounds/jump-sound.wav").play();
+    new Audio("./src/sounds/jump-sound.wav").play();
 }
 
 function recordLap() {
@@ -158,7 +157,6 @@ function timerHasStarted() {
 function lapsIsEmpty() {
     return laps.length == 0;
 }
-
 
 //KEYBOARD EVENTS
 document.addEventListener("keyup", event => {
